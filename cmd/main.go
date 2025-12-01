@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
 	"github.com/google/gopacket/pcap"
 	"github.com/pushk1nn/netwatch/internal"
 )
@@ -21,7 +22,23 @@ func listen(dev string) {
 		packetSource := gopacket.NewPacketSource(handle, handle.LinkType())
 
 		for packet := range packetSource.Packets() {
-			internal.Process(packet)
+			// get TCP layer of packet
+			if tcpLayer := packet.Layer(layers.LayerTypeTCP); tcpLayer != nil {
+				tcp, _ := tcpLayer.(*layers.TCP)
+				// get IPv4 layer of packet
+				if ipv4Layer := packet.Layer(layers.LayerTypeIPv4); ipv4Layer != nil {
+					// get IP address of host receiving the connection from server
+					ipv4, _ := ipv4Layer.(*layers.IPv4)
+					ip := ipv4.DstIP.String()
+
+					if tcp.SYN && tcp.ACK { // Indicates start of SSH session
+						internal.Start(packet, ip)
+					} else if tcp.FIN && tcp.ACK { // Indicates end of SSH session
+						internal.ActiveConnections[ip].End(packet)
+						internal.ActiveConnections[ip].Print()
+					}
+				}
+			}
 		}
 	}
 }
