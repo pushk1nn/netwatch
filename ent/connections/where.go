@@ -59,14 +59,14 @@ func EventID(v string) predicate.Connections {
 	return predicate.Connections(sql.FieldEQ(FieldEventID, v))
 }
 
-// StartTime applies equality check predicate on the "start_time" field. It's identical to StartTimeEQ.
-func StartTime(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldEQ(FieldStartTime, v))
+// Time applies equality check predicate on the "time" field. It's identical to TimeEQ.
+func Time(v time.Time) predicate.Connections {
+	return predicate.Connections(sql.FieldEQ(FieldTime, v))
 }
 
-// EndTime applies equality check predicate on the "end_time" field. It's identical to EndTimeEQ.
-func EndTime(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldEQ(FieldEndTime, v))
+// Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
+func Type(v string) predicate.Connections {
+	return predicate.Connections(sql.FieldEQ(FieldType, v))
 }
 
 // IP applies equality check predicate on the "ip" field. It's identical to IPEQ.
@@ -139,84 +139,109 @@ func EventIDContainsFold(v string) predicate.Connections {
 	return predicate.Connections(sql.FieldContainsFold(FieldEventID, v))
 }
 
-// StartTimeEQ applies the EQ predicate on the "start_time" field.
-func StartTimeEQ(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldEQ(FieldStartTime, v))
+// TimeEQ applies the EQ predicate on the "time" field.
+func TimeEQ(v time.Time) predicate.Connections {
+	return predicate.Connections(sql.FieldEQ(FieldTime, v))
 }
 
-// StartTimeNEQ applies the NEQ predicate on the "start_time" field.
-func StartTimeNEQ(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldNEQ(FieldStartTime, v))
+// TimeNEQ applies the NEQ predicate on the "time" field.
+func TimeNEQ(v time.Time) predicate.Connections {
+	return predicate.Connections(sql.FieldNEQ(FieldTime, v))
 }
 
-// StartTimeIn applies the In predicate on the "start_time" field.
-func StartTimeIn(vs ...time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldIn(FieldStartTime, vs...))
+// TimeIn applies the In predicate on the "time" field.
+func TimeIn(vs ...time.Time) predicate.Connections {
+	return predicate.Connections(sql.FieldIn(FieldTime, vs...))
 }
 
-// StartTimeNotIn applies the NotIn predicate on the "start_time" field.
-func StartTimeNotIn(vs ...time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldNotIn(FieldStartTime, vs...))
+// TimeNotIn applies the NotIn predicate on the "time" field.
+func TimeNotIn(vs ...time.Time) predicate.Connections {
+	return predicate.Connections(sql.FieldNotIn(FieldTime, vs...))
 }
 
-// StartTimeGT applies the GT predicate on the "start_time" field.
-func StartTimeGT(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldGT(FieldStartTime, v))
+// TimeGT applies the GT predicate on the "time" field.
+func TimeGT(v time.Time) predicate.Connections {
+	return predicate.Connections(sql.FieldGT(FieldTime, v))
 }
 
-// StartTimeGTE applies the GTE predicate on the "start_time" field.
-func StartTimeGTE(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldGTE(FieldStartTime, v))
+// TimeGTE applies the GTE predicate on the "time" field.
+func TimeGTE(v time.Time) predicate.Connections {
+	return predicate.Connections(sql.FieldGTE(FieldTime, v))
 }
 
-// StartTimeLT applies the LT predicate on the "start_time" field.
-func StartTimeLT(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldLT(FieldStartTime, v))
+// TimeLT applies the LT predicate on the "time" field.
+func TimeLT(v time.Time) predicate.Connections {
+	return predicate.Connections(sql.FieldLT(FieldTime, v))
 }
 
-// StartTimeLTE applies the LTE predicate on the "start_time" field.
-func StartTimeLTE(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldLTE(FieldStartTime, v))
+// TimeLTE applies the LTE predicate on the "time" field.
+func TimeLTE(v time.Time) predicate.Connections {
+	return predicate.Connections(sql.FieldLTE(FieldTime, v))
 }
 
-// EndTimeEQ applies the EQ predicate on the "end_time" field.
-func EndTimeEQ(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldEQ(FieldEndTime, v))
+// TypeEQ applies the EQ predicate on the "type" field.
+func TypeEQ(v string) predicate.Connections {
+	return predicate.Connections(sql.FieldEQ(FieldType, v))
 }
 
-// EndTimeNEQ applies the NEQ predicate on the "end_time" field.
-func EndTimeNEQ(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldNEQ(FieldEndTime, v))
+// TypeNEQ applies the NEQ predicate on the "type" field.
+func TypeNEQ(v string) predicate.Connections {
+	return predicate.Connections(sql.FieldNEQ(FieldType, v))
 }
 
-// EndTimeIn applies the In predicate on the "end_time" field.
-func EndTimeIn(vs ...time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldIn(FieldEndTime, vs...))
+// TypeIn applies the In predicate on the "type" field.
+func TypeIn(vs ...string) predicate.Connections {
+	return predicate.Connections(sql.FieldIn(FieldType, vs...))
 }
 
-// EndTimeNotIn applies the NotIn predicate on the "end_time" field.
-func EndTimeNotIn(vs ...time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldNotIn(FieldEndTime, vs...))
+// TypeNotIn applies the NotIn predicate on the "type" field.
+func TypeNotIn(vs ...string) predicate.Connections {
+	return predicate.Connections(sql.FieldNotIn(FieldType, vs...))
 }
 
-// EndTimeGT applies the GT predicate on the "end_time" field.
-func EndTimeGT(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldGT(FieldEndTime, v))
+// TypeGT applies the GT predicate on the "type" field.
+func TypeGT(v string) predicate.Connections {
+	return predicate.Connections(sql.FieldGT(FieldType, v))
 }
 
-// EndTimeGTE applies the GTE predicate on the "end_time" field.
-func EndTimeGTE(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldGTE(FieldEndTime, v))
+// TypeGTE applies the GTE predicate on the "type" field.
+func TypeGTE(v string) predicate.Connections {
+	return predicate.Connections(sql.FieldGTE(FieldType, v))
 }
 
-// EndTimeLT applies the LT predicate on the "end_time" field.
-func EndTimeLT(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldLT(FieldEndTime, v))
+// TypeLT applies the LT predicate on the "type" field.
+func TypeLT(v string) predicate.Connections {
+	return predicate.Connections(sql.FieldLT(FieldType, v))
 }
 
-// EndTimeLTE applies the LTE predicate on the "end_time" field.
-func EndTimeLTE(v time.Time) predicate.Connections {
-	return predicate.Connections(sql.FieldLTE(FieldEndTime, v))
+// TypeLTE applies the LTE predicate on the "type" field.
+func TypeLTE(v string) predicate.Connections {
+	return predicate.Connections(sql.FieldLTE(FieldType, v))
+}
+
+// TypeContains applies the Contains predicate on the "type" field.
+func TypeContains(v string) predicate.Connections {
+	return predicate.Connections(sql.FieldContains(FieldType, v))
+}
+
+// TypeHasPrefix applies the HasPrefix predicate on the "type" field.
+func TypeHasPrefix(v string) predicate.Connections {
+	return predicate.Connections(sql.FieldHasPrefix(FieldType, v))
+}
+
+// TypeHasSuffix applies the HasSuffix predicate on the "type" field.
+func TypeHasSuffix(v string) predicate.Connections {
+	return predicate.Connections(sql.FieldHasSuffix(FieldType, v))
+}
+
+// TypeEqualFold applies the EqualFold predicate on the "type" field.
+func TypeEqualFold(v string) predicate.Connections {
+	return predicate.Connections(sql.FieldEqualFold(FieldType, v))
+}
+
+// TypeContainsFold applies the ContainsFold predicate on the "type" field.
+func TypeContainsFold(v string) predicate.Connections {
+	return predicate.Connections(sql.FieldContainsFold(FieldType, v))
 }
 
 // IPEQ applies the EQ predicate on the "ip" field.

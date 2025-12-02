@@ -44,20 +44,22 @@ func Start(packet gopacket.Packet, ip string) {
 			start:    packet.Metadata().Timestamp.In(loc),
 		}
 
-		_, err := Client.Connections.
+		c, err := Client.Connections.
 			Create().
 			SetEventID(uuid.New().String()).
 			SetIP(ip).
-			SetStartTime(packet.Metadata().Timestamp).
+			SetTime(packet.Metadata().Timestamp).
+			SetType("CONNECT").
 			Save(Ctx)
 
+		log.Println("connection was logged: ", c)
+
 		if err != nil {
-			log.Print("failed to log connection.")
+			log.Printf("failed to log connection: %v", err)
 		}
 
 		ActiveConnections[ip] = connection
 
-		return
 	}
 }
 

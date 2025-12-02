@@ -42,30 +42,30 @@ func (_u *ConnectionsUpdate) SetNillableEventID(v *string) *ConnectionsUpdate {
 	return _u
 }
 
-// SetStartTime sets the "start_time" field.
-func (_u *ConnectionsUpdate) SetStartTime(v time.Time) *ConnectionsUpdate {
-	_u.mutation.SetStartTime(v)
+// SetTime sets the "time" field.
+func (_u *ConnectionsUpdate) SetTime(v time.Time) *ConnectionsUpdate {
+	_u.mutation.SetTime(v)
 	return _u
 }
 
-// SetNillableStartTime sets the "start_time" field if the given value is not nil.
-func (_u *ConnectionsUpdate) SetNillableStartTime(v *time.Time) *ConnectionsUpdate {
+// SetNillableTime sets the "time" field if the given value is not nil.
+func (_u *ConnectionsUpdate) SetNillableTime(v *time.Time) *ConnectionsUpdate {
 	if v != nil {
-		_u.SetStartTime(*v)
+		_u.SetTime(*v)
 	}
 	return _u
 }
 
-// SetEndTime sets the "end_time" field.
-func (_u *ConnectionsUpdate) SetEndTime(v time.Time) *ConnectionsUpdate {
-	_u.mutation.SetEndTime(v)
+// SetType sets the "type" field.
+func (_u *ConnectionsUpdate) SetType(v string) *ConnectionsUpdate {
+	_u.mutation.SetType(v)
 	return _u
 }
 
-// SetNillableEndTime sets the "end_time" field if the given value is not nil.
-func (_u *ConnectionsUpdate) SetNillableEndTime(v *time.Time) *ConnectionsUpdate {
+// SetNillableType sets the "type" field if the given value is not nil.
+func (_u *ConnectionsUpdate) SetNillableType(v *string) *ConnectionsUpdate {
 	if v != nil {
-		_u.SetEndTime(*v)
+		_u.SetType(*v)
 	}
 	return _u
 }
@@ -128,11 +128,11 @@ func (_u *ConnectionsUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if value, ok := _u.mutation.EventID(); ok {
 		_spec.SetField(connections.FieldEventID, field.TypeString, value)
 	}
-	if value, ok := _u.mutation.StartTime(); ok {
-		_spec.SetField(connections.FieldStartTime, field.TypeTime, value)
+	if value, ok := _u.mutation.Time(); ok {
+		_spec.SetField(connections.FieldTime, field.TypeTime, value)
 	}
-	if value, ok := _u.mutation.EndTime(); ok {
-		_spec.SetField(connections.FieldEndTime, field.TypeTime, value)
+	if value, ok := _u.mutation.GetType(); ok {
+		_spec.SetField(connections.FieldType, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.IP(); ok {
 		_spec.SetField(connections.FieldIP, field.TypeString, value)
@@ -171,30 +171,30 @@ func (_u *ConnectionsUpdateOne) SetNillableEventID(v *string) *ConnectionsUpdate
 	return _u
 }
 
-// SetStartTime sets the "start_time" field.
-func (_u *ConnectionsUpdateOne) SetStartTime(v time.Time) *ConnectionsUpdateOne {
-	_u.mutation.SetStartTime(v)
+// SetTime sets the "time" field.
+func (_u *ConnectionsUpdateOne) SetTime(v time.Time) *ConnectionsUpdateOne {
+	_u.mutation.SetTime(v)
 	return _u
 }
 
-// SetNillableStartTime sets the "start_time" field if the given value is not nil.
-func (_u *ConnectionsUpdateOne) SetNillableStartTime(v *time.Time) *ConnectionsUpdateOne {
+// SetNillableTime sets the "time" field if the given value is not nil.
+func (_u *ConnectionsUpdateOne) SetNillableTime(v *time.Time) *ConnectionsUpdateOne {
 	if v != nil {
-		_u.SetStartTime(*v)
+		_u.SetTime(*v)
 	}
 	return _u
 }
 
-// SetEndTime sets the "end_time" field.
-func (_u *ConnectionsUpdateOne) SetEndTime(v time.Time) *ConnectionsUpdateOne {
-	_u.mutation.SetEndTime(v)
+// SetType sets the "type" field.
+func (_u *ConnectionsUpdateOne) SetType(v string) *ConnectionsUpdateOne {
+	_u.mutation.SetType(v)
 	return _u
 }
 
-// SetNillableEndTime sets the "end_time" field if the given value is not nil.
-func (_u *ConnectionsUpdateOne) SetNillableEndTime(v *time.Time) *ConnectionsUpdateOne {
+// SetNillableType sets the "type" field if the given value is not nil.
+func (_u *ConnectionsUpdateOne) SetNillableType(v *string) *ConnectionsUpdateOne {
 	if v != nil {
-		_u.SetEndTime(*v)
+		_u.SetType(*v)
 	}
 	return _u
 }
@@ -287,11 +287,11 @@ func (_u *ConnectionsUpdateOne) sqlSave(ctx context.Context) (_node *Connections
 	if value, ok := _u.mutation.EventID(); ok {
 		_spec.SetField(connections.FieldEventID, field.TypeString, value)
 	}
-	if value, ok := _u.mutation.StartTime(); ok {
-		_spec.SetField(connections.FieldStartTime, field.TypeTime, value)
+	if value, ok := _u.mutation.Time(); ok {
+		_spec.SetField(connections.FieldTime, field.TypeTime, value)
 	}
-	if value, ok := _u.mutation.EndTime(); ok {
-		_spec.SetField(connections.FieldEndTime, field.TypeTime, value)
+	if value, ok := _u.mutation.GetType(); ok {
+		_spec.SetField(connections.FieldType, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.IP(); ok {
 		_spec.SetField(connections.FieldIP, field.TypeString, value)

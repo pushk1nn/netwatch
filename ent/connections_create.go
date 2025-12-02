@@ -26,15 +26,15 @@ func (_c *ConnectionsCreate) SetEventID(v string) *ConnectionsCreate {
 	return _c
 }
 
-// SetStartTime sets the "start_time" field.
-func (_c *ConnectionsCreate) SetStartTime(v time.Time) *ConnectionsCreate {
-	_c.mutation.SetStartTime(v)
+// SetTime sets the "time" field.
+func (_c *ConnectionsCreate) SetTime(v time.Time) *ConnectionsCreate {
+	_c.mutation.SetTime(v)
 	return _c
 }
 
-// SetEndTime sets the "end_time" field.
-func (_c *ConnectionsCreate) SetEndTime(v time.Time) *ConnectionsCreate {
-	_c.mutation.SetEndTime(v)
+// SetType sets the "type" field.
+func (_c *ConnectionsCreate) SetType(v string) *ConnectionsCreate {
+	_c.mutation.SetType(v)
 	return _c
 }
 
@@ -81,11 +81,11 @@ func (_c *ConnectionsCreate) check() error {
 	if _, ok := _c.mutation.EventID(); !ok {
 		return &ValidationError{Name: "event_id", err: errors.New(`ent: missing required field "Connections.event_id"`)}
 	}
-	if _, ok := _c.mutation.StartTime(); !ok {
-		return &ValidationError{Name: "start_time", err: errors.New(`ent: missing required field "Connections.start_time"`)}
+	if _, ok := _c.mutation.Time(); !ok {
+		return &ValidationError{Name: "time", err: errors.New(`ent: missing required field "Connections.time"`)}
 	}
-	if _, ok := _c.mutation.EndTime(); !ok {
-		return &ValidationError{Name: "end_time", err: errors.New(`ent: missing required field "Connections.end_time"`)}
+	if _, ok := _c.mutation.GetType(); !ok {
+		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "Connections.type"`)}
 	}
 	if _, ok := _c.mutation.IP(); !ok {
 		return &ValidationError{Name: "ip", err: errors.New(`ent: missing required field "Connections.ip"`)}
@@ -120,13 +120,13 @@ func (_c *ConnectionsCreate) createSpec() (*Connections, *sqlgraph.CreateSpec) {
 		_spec.SetField(connections.FieldEventID, field.TypeString, value)
 		_node.EventID = value
 	}
-	if value, ok := _c.mutation.StartTime(); ok {
-		_spec.SetField(connections.FieldStartTime, field.TypeTime, value)
-		_node.StartTime = value
+	if value, ok := _c.mutation.Time(); ok {
+		_spec.SetField(connections.FieldTime, field.TypeTime, value)
+		_node.Time = value
 	}
-	if value, ok := _c.mutation.EndTime(); ok {
-		_spec.SetField(connections.FieldEndTime, field.TypeTime, value)
-		_node.EndTime = value
+	if value, ok := _c.mutation.GetType(); ok {
+		_spec.SetField(connections.FieldType, field.TypeString, value)
+		_node.Type = value
 	}
 	if value, ok := _c.mutation.IP(); ok {
 		_spec.SetField(connections.FieldIP, field.TypeString, value)

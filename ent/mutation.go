@@ -34,8 +34,8 @@ type ConnectionsMutation struct {
 	typ           string
 	id            *int
 	event_id      *string
-	start_time    *time.Time
-	end_time      *time.Time
+	time          *time.Time
+	_type         *string
 	ip            *string
 	clearedFields map[string]struct{}
 	done          bool
@@ -177,76 +177,76 @@ func (m *ConnectionsMutation) ResetEventID() {
 	m.event_id = nil
 }
 
-// SetStartTime sets the "start_time" field.
-func (m *ConnectionsMutation) SetStartTime(t time.Time) {
-	m.start_time = &t
+// SetTime sets the "time" field.
+func (m *ConnectionsMutation) SetTime(t time.Time) {
+	m.time = &t
 }
 
-// StartTime returns the value of the "start_time" field in the mutation.
-func (m *ConnectionsMutation) StartTime() (r time.Time, exists bool) {
-	v := m.start_time
+// Time returns the value of the "time" field in the mutation.
+func (m *ConnectionsMutation) Time() (r time.Time, exists bool) {
+	v := m.time
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldStartTime returns the old "start_time" field's value of the Connections entity.
+// OldTime returns the old "time" field's value of the Connections entity.
 // If the Connections object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ConnectionsMutation) OldStartTime(ctx context.Context) (v time.Time, err error) {
+func (m *ConnectionsMutation) OldTime(ctx context.Context) (v time.Time, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldStartTime is only allowed on UpdateOne operations")
+		return v, errors.New("OldTime is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldStartTime requires an ID field in the mutation")
+		return v, errors.New("OldTime requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldStartTime: %w", err)
+		return v, fmt.Errorf("querying old value for OldTime: %w", err)
 	}
-	return oldValue.StartTime, nil
+	return oldValue.Time, nil
 }
 
-// ResetStartTime resets all changes to the "start_time" field.
-func (m *ConnectionsMutation) ResetStartTime() {
-	m.start_time = nil
+// ResetTime resets all changes to the "time" field.
+func (m *ConnectionsMutation) ResetTime() {
+	m.time = nil
 }
 
-// SetEndTime sets the "end_time" field.
-func (m *ConnectionsMutation) SetEndTime(t time.Time) {
-	m.end_time = &t
+// SetType sets the "type" field.
+func (m *ConnectionsMutation) SetType(s string) {
+	m._type = &s
 }
 
-// EndTime returns the value of the "end_time" field in the mutation.
-func (m *ConnectionsMutation) EndTime() (r time.Time, exists bool) {
-	v := m.end_time
+// GetType returns the value of the "type" field in the mutation.
+func (m *ConnectionsMutation) GetType() (r string, exists bool) {
+	v := m._type
 	if v == nil {
 		return
 	}
 	return *v, true
 }
 
-// OldEndTime returns the old "end_time" field's value of the Connections entity.
+// OldType returns the old "type" field's value of the Connections entity.
 // If the Connections object wasn't provided to the builder, the object is fetched from the database.
 // An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ConnectionsMutation) OldEndTime(ctx context.Context) (v time.Time, err error) {
+func (m *ConnectionsMutation) OldType(ctx context.Context) (v string, err error) {
 	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEndTime is only allowed on UpdateOne operations")
+		return v, errors.New("OldType is only allowed on UpdateOne operations")
 	}
 	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEndTime requires an ID field in the mutation")
+		return v, errors.New("OldType requires an ID field in the mutation")
 	}
 	oldValue, err := m.oldValue(ctx)
 	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEndTime: %w", err)
+		return v, fmt.Errorf("querying old value for OldType: %w", err)
 	}
-	return oldValue.EndTime, nil
+	return oldValue.Type, nil
 }
 
-// ResetEndTime resets all changes to the "end_time" field.
-func (m *ConnectionsMutation) ResetEndTime() {
-	m.end_time = nil
+// ResetType resets all changes to the "type" field.
+func (m *ConnectionsMutation) ResetType() {
+	m._type = nil
 }
 
 // SetIP sets the "ip" field.
@@ -323,11 +323,11 @@ func (m *ConnectionsMutation) Fields() []string {
 	if m.event_id != nil {
 		fields = append(fields, connections.FieldEventID)
 	}
-	if m.start_time != nil {
-		fields = append(fields, connections.FieldStartTime)
+	if m.time != nil {
+		fields = append(fields, connections.FieldTime)
 	}
-	if m.end_time != nil {
-		fields = append(fields, connections.FieldEndTime)
+	if m._type != nil {
+		fields = append(fields, connections.FieldType)
 	}
 	if m.ip != nil {
 		fields = append(fields, connections.FieldIP)
@@ -342,10 +342,10 @@ func (m *ConnectionsMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case connections.FieldEventID:
 		return m.EventID()
-	case connections.FieldStartTime:
-		return m.StartTime()
-	case connections.FieldEndTime:
-		return m.EndTime()
+	case connections.FieldTime:
+		return m.Time()
+	case connections.FieldType:
+		return m.GetType()
 	case connections.FieldIP:
 		return m.IP()
 	}
@@ -359,10 +359,10 @@ func (m *ConnectionsMutation) OldField(ctx context.Context, name string) (ent.Va
 	switch name {
 	case connections.FieldEventID:
 		return m.OldEventID(ctx)
-	case connections.FieldStartTime:
-		return m.OldStartTime(ctx)
-	case connections.FieldEndTime:
-		return m.OldEndTime(ctx)
+	case connections.FieldTime:
+		return m.OldTime(ctx)
+	case connections.FieldType:
+		return m.OldType(ctx)
 	case connections.FieldIP:
 		return m.OldIP(ctx)
 	}
@@ -381,19 +381,19 @@ func (m *ConnectionsMutation) SetField(name string, value ent.Value) error {
 		}
 		m.SetEventID(v)
 		return nil
-	case connections.FieldStartTime:
+	case connections.FieldTime:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetStartTime(v)
+		m.SetTime(v)
 		return nil
-	case connections.FieldEndTime:
-		v, ok := value.(time.Time)
+	case connections.FieldType:
+		v, ok := value.(string)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
-		m.SetEndTime(v)
+		m.SetType(v)
 		return nil
 	case connections.FieldIP:
 		v, ok := value.(string)
@@ -454,11 +454,11 @@ func (m *ConnectionsMutation) ResetField(name string) error {
 	case connections.FieldEventID:
 		m.ResetEventID()
 		return nil
-	case connections.FieldStartTime:
-		m.ResetStartTime()
+	case connections.FieldTime:
+		m.ResetTime()
 		return nil
-	case connections.FieldEndTime:
-		m.ResetEndTime()
+	case connections.FieldType:
+		m.ResetType()
 		return nil
 	case connections.FieldIP:
 		m.ResetIP()

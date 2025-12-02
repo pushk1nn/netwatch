@@ -16,10 +16,10 @@ func (Connections) Fields() []ent.Field {
 		field.String("event_id").
 			Comment("Unique ID associated with individual log").
 			Unique(),
-		field.Time("start_time").
-			Comment("Time at which connection started"),
-		field.Time("end_time").
-			Comment("Time at which connection ended"),
+		field.Time("time").
+			Comment("Time at which event occurred"),
+		field.String("type").
+			Comment("Event type (connect, disconnect)"),
 		field.String("ip").
 			Comment("IP from which a connection is coming from"),
 	}

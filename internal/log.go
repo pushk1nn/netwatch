@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/pushk1nn/netwatch/ent"
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/pushk1nn/netwatch/ent"
 )
 
 var (
@@ -21,8 +21,8 @@ func init() {
 
 	Client = client
 
-	defer Client.Close()
 	ctx := context.Background()
+	Ctx = ctx
 
 	if err := Client.Schema.Create(ctx); err != nil {
 		log.Fatalf("failed creating schema resources: %v", err)

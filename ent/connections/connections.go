@@ -13,10 +13,10 @@ const (
 	FieldID = "id"
 	// FieldEventID holds the string denoting the event_id field in the database.
 	FieldEventID = "event_id"
-	// FieldStartTime holds the string denoting the start_time field in the database.
-	FieldStartTime = "start_time"
-	// FieldEndTime holds the string denoting the end_time field in the database.
-	FieldEndTime = "end_time"
+	// FieldTime holds the string denoting the time field in the database.
+	FieldTime = "time"
+	// FieldType holds the string denoting the type field in the database.
+	FieldType = "type"
 	// FieldIP holds the string denoting the ip field in the database.
 	FieldIP = "ip"
 	// Table holds the table name of the connections in the database.
@@ -27,8 +27,8 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldEventID,
-	FieldStartTime,
-	FieldEndTime,
+	FieldTime,
+	FieldType,
 	FieldIP,
 }
 
@@ -55,14 +55,14 @@ func ByEventID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldEventID, opts...).ToFunc()
 }
 
-// ByStartTime orders the results by the start_time field.
-func ByStartTime(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldStartTime, opts...).ToFunc()
+// ByTime orders the results by the time field.
+func ByTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTime, opts...).ToFunc()
 }
 
-// ByEndTime orders the results by the end_time field.
-func ByEndTime(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEndTime, opts...).ToFunc()
+// ByType orders the results by the type field.
+func ByType(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldType, opts...).ToFunc()
 }
 
 // ByIP orders the results by the ip field.

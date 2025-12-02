@@ -12,8 +12,8 @@ var (
 	ConnectionsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "event_id", Type: field.TypeString, Unique: true},
-		{Name: "start_time", Type: field.TypeTime},
-		{Name: "end_time", Type: field.TypeTime},
+		{Name: "time", Type: field.TypeTime},
+		{Name: "type", Type: field.TypeString},
 		{Name: "ip", Type: field.TypeString},
 	}
 	// ConnectionsTable holds the schema information for the "connections" table.

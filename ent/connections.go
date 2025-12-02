@@ -19,10 +19,10 @@ type Connections struct {
 	ID int `json:"id,omitempty"`
 	// Unique ID associated with individual log
 	EventID string `json:"event_id,omitempty"`
-	// Time at which connection started
-	StartTime time.Time `json:"start_time,omitempty"`
-	// Time at which connection ended
-	EndTime time.Time `json:"end_time,omitempty"`
+	// Time at which event occurred
+	Time time.Time `json:"time,omitempty"`
+	// Event type (connect, disconnect)
+	Type string `json:"type,omitempty"`
 	// IP from which a connection is coming from
 	IP           string `json:"ip,omitempty"`
 	selectValues sql.SelectValues
@@ -35,9 +35,9 @@ func (*Connections) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case connections.FieldID:
 			values[i] = new(sql.NullInt64)
-		case connections.FieldEventID, connections.FieldIP:
+		case connections.FieldEventID, connections.FieldType, connections.FieldIP:
 			values[i] = new(sql.NullString)
-		case connections.FieldStartTime, connections.FieldEndTime:
+		case connections.FieldTime:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -66,17 +66,17 @@ func (_m *Connections) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.EventID = value.String
 			}
-		case connections.FieldStartTime:
+		case connections.FieldTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field start_time", values[i])
+				return fmt.Errorf("unexpected type %T for field time", values[i])
 			} else if value.Valid {
-				_m.StartTime = value.Time
+				_m.Time = value.Time
 			}
-		case connections.FieldEndTime:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field end_time", values[i])
+		case connections.FieldType:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field type", values[i])
 			} else if value.Valid {
-				_m.EndTime = value.Time
+				_m.Type = value.String
 			}
 		case connections.FieldIP:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -123,11 +123,11 @@ func (_m *Connections) String() string {
 	builder.WriteString("event_id=")
 	builder.WriteString(_m.EventID)
 	builder.WriteString(", ")
-	builder.WriteString("start_time=")
-	builder.WriteString(_m.StartTime.Format(time.ANSIC))
+	builder.WriteString("time=")
+	builder.WriteString(_m.Time.Format(time.ANSIC))
 	builder.WriteString(", ")
-	builder.WriteString("end_time=")
-	builder.WriteString(_m.EndTime.Format(time.ANSIC))
+	builder.WriteString("type=")
+	builder.WriteString(_m.Type)
 	builder.WriteString(", ")
 	builder.WriteString("ip=")
 	builder.WriteString(_m.IP)
