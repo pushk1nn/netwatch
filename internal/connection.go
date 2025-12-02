@@ -2,9 +2,11 @@ package internal
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"github.com/google/gopacket"
+	"github.com/google/uuid"
 )
 
 // ActiveConnections is a map of host IPs, mapped to UUIDs representing
@@ -42,7 +44,20 @@ func Start(packet gopacket.Packet, ip string) {
 			start:    packet.Metadata().Timestamp.In(loc),
 		}
 
+		_, err := Client.Connections.
+			Create().
+			SetEventID(uuid.New().String()).
+			SetIP(ip).
+			SetStartTime(packet.Metadata().Timestamp).
+			Save(Ctx)
+
+		if err != nil {
+			log.Print("failed to log connection.")
+		}
+
 		ActiveConnections[ip] = connection
+
+		return
 	}
 }
 
