@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/google/gopacket"
-	"github.com/google/uuid"
 )
 
 // ActiveConnections is a map of host IPs, mapped to UUIDs representing
@@ -44,15 +43,17 @@ func Start(packet gopacket.Packet, ip string) {
 			start:    packet.Metadata().Timestamp.In(loc),
 		}
 
-		c, err := Client.Connections.
+		time := packet.Metadata().Timestamp.In(loc)
+
+		conn, err := Client.Connections.
 			Create().
-			SetEventID(uuid.New().String()).
 			SetIP(ip).
-			SetTime(packet.Metadata().Timestamp).
+			SetTime(time).
+			SetUnixTime(time.Unix()).
 			SetType("CONNECT").
 			Save(Ctx)
 
-		log.Println("connection was logged: ", c)
+		log.Println("connection was logged: ", conn)
 
 		if err != nil {
 			log.Printf("failed to log connection: %v", err)
@@ -63,8 +64,22 @@ func Start(packet gopacket.Packet, ip string) {
 	}
 }
 
-func (c *Connection) End(packet gopacket.Packet) {
-	c.end = packet.Metadata().Timestamp.In(loc)
+func End(packet gopacket.Packet, ip string) {
+	time := packet.Metadata().Timestamp.In(loc)
+
+	conn, err := Client.Connections.
+		Create().
+		SetIP(ip).
+		SetTime(time).
+		SetUnixTime(time.Unix()).
+		SetType("DISCONNECT").
+		Save(Ctx)
+
+	log.Println("connection was logged: ", conn)
+
+	if err != nil {
+		log.Printf("failed to log connection: %v", err)
+	}
 }
 
 func (c *Connection) Print() {

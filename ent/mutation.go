@@ -11,6 +11,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 	"github.com/pushk1nn/netwatch/ent/connections"
 	"github.com/pushk1nn/netwatch/ent/predicate"
 )
@@ -32,9 +33,10 @@ type ConnectionsMutation struct {
 	config
 	op            Op
 	typ           string
-	id            *int
-	event_id      *string
+	id            *uuid.UUID
 	time          *time.Time
+	unix_time     *int64
+	addunix_time  *int64
 	_type         *string
 	ip            *string
 	clearedFields map[string]struct{}
@@ -63,7 +65,7 @@ func newConnectionsMutation(c config, op Op, opts ...connectionsOption) *Connect
 }
 
 // withConnectionsID sets the ID field of the mutation.
-func withConnectionsID(id int) connectionsOption {
+func withConnectionsID(id uuid.UUID) connectionsOption {
 	return func(m *ConnectionsMutation) {
 		var (
 			err   error
@@ -113,9 +115,15 @@ func (m ConnectionsMutation) Tx() (*Tx, error) {
 	return tx, nil
 }
 
+// SetID sets the value of the id field. Note that this
+// operation is only accepted on creation of Connections entities.
+func (m *ConnectionsMutation) SetID(id uuid.UUID) {
+	m.id = &id
+}
+
 // ID returns the ID value in the mutation. Note that the ID is only available
 // if it was provided to the builder or after it was returned from the database.
-func (m *ConnectionsMutation) ID() (id int, exists bool) {
+func (m *ConnectionsMutation) ID() (id uuid.UUID, exists bool) {
 	if m.id == nil {
 		return
 	}
@@ -126,12 +134,12 @@ func (m *ConnectionsMutation) ID() (id int, exists bool) {
 // That means, if the mutation is applied within a transaction with an isolation level such
 // as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
 // or updated by the mutation.
-func (m *ConnectionsMutation) IDs(ctx context.Context) ([]int, error) {
+func (m *ConnectionsMutation) IDs(ctx context.Context) ([]uuid.UUID, error) {
 	switch {
 	case m.op.Is(OpUpdateOne | OpDeleteOne):
 		id, exists := m.ID()
 		if exists {
-			return []int{id}, nil
+			return []uuid.UUID{id}, nil
 		}
 		fallthrough
 	case m.op.Is(OpUpdate | OpDelete):
@@ -139,42 +147,6 @@ func (m *ConnectionsMutation) IDs(ctx context.Context) ([]int, error) {
 	default:
 		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
 	}
-}
-
-// SetEventID sets the "event_id" field.
-func (m *ConnectionsMutation) SetEventID(s string) {
-	m.event_id = &s
-}
-
-// EventID returns the value of the "event_id" field in the mutation.
-func (m *ConnectionsMutation) EventID() (r string, exists bool) {
-	v := m.event_id
-	if v == nil {
-		return
-	}
-	return *v, true
-}
-
-// OldEventID returns the old "event_id" field's value of the Connections entity.
-// If the Connections object wasn't provided to the builder, the object is fetched from the database.
-// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
-func (m *ConnectionsMutation) OldEventID(ctx context.Context) (v string, err error) {
-	if !m.op.Is(OpUpdateOne) {
-		return v, errors.New("OldEventID is only allowed on UpdateOne operations")
-	}
-	if m.id == nil || m.oldValue == nil {
-		return v, errors.New("OldEventID requires an ID field in the mutation")
-	}
-	oldValue, err := m.oldValue(ctx)
-	if err != nil {
-		return v, fmt.Errorf("querying old value for OldEventID: %w", err)
-	}
-	return oldValue.EventID, nil
-}
-
-// ResetEventID resets all changes to the "event_id" field.
-func (m *ConnectionsMutation) ResetEventID() {
-	m.event_id = nil
 }
 
 // SetTime sets the "time" field.
@@ -211,6 +183,62 @@ func (m *ConnectionsMutation) OldTime(ctx context.Context) (v time.Time, err err
 // ResetTime resets all changes to the "time" field.
 func (m *ConnectionsMutation) ResetTime() {
 	m.time = nil
+}
+
+// SetUnixTime sets the "unix_time" field.
+func (m *ConnectionsMutation) SetUnixTime(i int64) {
+	m.unix_time = &i
+	m.addunix_time = nil
+}
+
+// UnixTime returns the value of the "unix_time" field in the mutation.
+func (m *ConnectionsMutation) UnixTime() (r int64, exists bool) {
+	v := m.unix_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldUnixTime returns the old "unix_time" field's value of the Connections entity.
+// If the Connections object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *ConnectionsMutation) OldUnixTime(ctx context.Context) (v int64, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldUnixTime is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldUnixTime requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldUnixTime: %w", err)
+	}
+	return oldValue.UnixTime, nil
+}
+
+// AddUnixTime adds i to the "unix_time" field.
+func (m *ConnectionsMutation) AddUnixTime(i int64) {
+	if m.addunix_time != nil {
+		*m.addunix_time += i
+	} else {
+		m.addunix_time = &i
+	}
+}
+
+// AddedUnixTime returns the value that was added to the "unix_time" field in this mutation.
+func (m *ConnectionsMutation) AddedUnixTime() (r int64, exists bool) {
+	v := m.addunix_time
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// ResetUnixTime resets all changes to the "unix_time" field.
+func (m *ConnectionsMutation) ResetUnixTime() {
+	m.unix_time = nil
+	m.addunix_time = nil
 }
 
 // SetType sets the "type" field.
@@ -320,11 +348,11 @@ func (m *ConnectionsMutation) Type() string {
 // AddedFields().
 func (m *ConnectionsMutation) Fields() []string {
 	fields := make([]string, 0, 4)
-	if m.event_id != nil {
-		fields = append(fields, connections.FieldEventID)
-	}
 	if m.time != nil {
 		fields = append(fields, connections.FieldTime)
+	}
+	if m.unix_time != nil {
+		fields = append(fields, connections.FieldUnixTime)
 	}
 	if m._type != nil {
 		fields = append(fields, connections.FieldType)
@@ -340,10 +368,10 @@ func (m *ConnectionsMutation) Fields() []string {
 // schema.
 func (m *ConnectionsMutation) Field(name string) (ent.Value, bool) {
 	switch name {
-	case connections.FieldEventID:
-		return m.EventID()
 	case connections.FieldTime:
 		return m.Time()
+	case connections.FieldUnixTime:
+		return m.UnixTime()
 	case connections.FieldType:
 		return m.GetType()
 	case connections.FieldIP:
@@ -357,10 +385,10 @@ func (m *ConnectionsMutation) Field(name string) (ent.Value, bool) {
 // database failed.
 func (m *ConnectionsMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
 	switch name {
-	case connections.FieldEventID:
-		return m.OldEventID(ctx)
 	case connections.FieldTime:
 		return m.OldTime(ctx)
+	case connections.FieldUnixTime:
+		return m.OldUnixTime(ctx)
 	case connections.FieldType:
 		return m.OldType(ctx)
 	case connections.FieldIP:
@@ -374,19 +402,19 @@ func (m *ConnectionsMutation) OldField(ctx context.Context, name string) (ent.Va
 // type.
 func (m *ConnectionsMutation) SetField(name string, value ent.Value) error {
 	switch name {
-	case connections.FieldEventID:
-		v, ok := value.(string)
-		if !ok {
-			return fmt.Errorf("unexpected type %T for field %s", value, name)
-		}
-		m.SetEventID(v)
-		return nil
 	case connections.FieldTime:
 		v, ok := value.(time.Time)
 		if !ok {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTime(v)
+		return nil
+	case connections.FieldUnixTime:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetUnixTime(v)
 		return nil
 	case connections.FieldType:
 		v, ok := value.(string)
@@ -409,13 +437,21 @@ func (m *ConnectionsMutation) SetField(name string, value ent.Value) error {
 // AddedFields returns all numeric fields that were incremented/decremented during
 // this mutation.
 func (m *ConnectionsMutation) AddedFields() []string {
-	return nil
+	var fields []string
+	if m.addunix_time != nil {
+		fields = append(fields, connections.FieldUnixTime)
+	}
+	return fields
 }
 
 // AddedField returns the numeric value that was incremented/decremented on a field
 // with the given name. The second boolean return value indicates that this field
 // was not set, or was not defined in the schema.
 func (m *ConnectionsMutation) AddedField(name string) (ent.Value, bool) {
+	switch name {
+	case connections.FieldUnixTime:
+		return m.AddedUnixTime()
+	}
 	return nil, false
 }
 
@@ -424,6 +460,13 @@ func (m *ConnectionsMutation) AddedField(name string) (ent.Value, bool) {
 // type.
 func (m *ConnectionsMutation) AddField(name string, value ent.Value) error {
 	switch name {
+	case connections.FieldUnixTime:
+		v, ok := value.(int64)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.AddUnixTime(v)
+		return nil
 	}
 	return fmt.Errorf("unknown Connections numeric field %s", name)
 }
@@ -451,11 +494,11 @@ func (m *ConnectionsMutation) ClearField(name string) error {
 // It returns an error if the field is not defined in the schema.
 func (m *ConnectionsMutation) ResetField(name string) error {
 	switch name {
-	case connections.FieldEventID:
-		m.ResetEventID()
-		return nil
 	case connections.FieldTime:
 		m.ResetTime()
+		return nil
+	case connections.FieldUnixTime:
+		m.ResetUnixTime()
 		return nil
 	case connections.FieldType:
 		m.ResetType()

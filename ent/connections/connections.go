@@ -4,6 +4,7 @@ package connections
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 )
 
 const (
@@ -11,10 +12,10 @@ const (
 	Label = "connections"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
-	// FieldEventID holds the string denoting the event_id field in the database.
-	FieldEventID = "event_id"
 	// FieldTime holds the string denoting the time field in the database.
 	FieldTime = "time"
+	// FieldUnixTime holds the string denoting the unix_time field in the database.
+	FieldUnixTime = "unix_time"
 	// FieldType holds the string denoting the type field in the database.
 	FieldType = "type"
 	// FieldIP holds the string denoting the ip field in the database.
@@ -26,8 +27,8 @@ const (
 // Columns holds all SQL columns for connections fields.
 var Columns = []string{
 	FieldID,
-	FieldEventID,
 	FieldTime,
+	FieldUnixTime,
 	FieldType,
 	FieldIP,
 }
@@ -42,6 +43,11 @@ func ValidColumn(column string) bool {
 	return false
 }
 
+var (
+	// DefaultID holds the default value on creation for the "id" field.
+	DefaultID func() uuid.UUID
+)
+
 // OrderOption defines the ordering options for the Connections queries.
 type OrderOption func(*sql.Selector)
 
@@ -50,14 +56,14 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
 }
 
-// ByEventID orders the results by the event_id field.
-func ByEventID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldEventID, opts...).ToFunc()
-}
-
 // ByTime orders the results by the time field.
 func ByTime(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTime, opts...).ToFunc()
+}
+
+// ByUnixTime orders the results by the unix_time field.
+func ByUnixTime(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldUnixTime, opts...).ToFunc()
 }
 
 // ByType orders the results by the type field.

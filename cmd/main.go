@@ -34,8 +34,7 @@ func listen(dev string) {
 					if tcp.SYN && tcp.ACK { // Indicates start of SSH session
 						internal.Start(packet, ip)
 					} else if tcp.FIN && tcp.ACK { // Indicates end of SSH session
-						internal.ActiveConnections[ip].End(packet)
-						internal.ActiveConnections[ip].Print()
+						internal.End(packet, ip)
 					}
 				}
 			}

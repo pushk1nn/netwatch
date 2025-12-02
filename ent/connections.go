@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 	"github.com/pushk1nn/netwatch/ent/connections"
 )
 
@@ -16,11 +17,12 @@ import (
 type Connections struct {
 	config `json:"-"`
 	// ID of the ent.
-	ID int `json:"id,omitempty"`
-	// Unique ID associated with individual log
-	EventID string `json:"event_id,omitempty"`
+	// Unique ID of individual event
+	ID uuid.UUID `json:"id,omitempty"`
 	// Time at which event occurred
 	Time time.Time `json:"time,omitempty"`
+	// Time at which event occurred as Unix Time Stamp
+	UnixTime int64 `json:"unix_time,omitempty"`
 	// Event type (connect, disconnect)
 	Type string `json:"type,omitempty"`
 	// IP from which a connection is coming from
@@ -33,12 +35,14 @@ func (*Connections) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case connections.FieldID:
+		case connections.FieldUnixTime:
 			values[i] = new(sql.NullInt64)
-		case connections.FieldEventID, connections.FieldType, connections.FieldIP:
+		case connections.FieldType, connections.FieldIP:
 			values[i] = new(sql.NullString)
 		case connections.FieldTime:
 			values[i] = new(sql.NullTime)
+		case connections.FieldID:
+			values[i] = new(uuid.UUID)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -55,22 +59,22 @@ func (_m *Connections) assignValues(columns []string, values []any) error {
 	for i := range columns {
 		switch columns[i] {
 		case connections.FieldID:
-			value, ok := values[i].(*sql.NullInt64)
-			if !ok {
-				return fmt.Errorf("unexpected type %T for field id", value)
-			}
-			_m.ID = int(value.Int64)
-		case connections.FieldEventID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field event_id", values[i])
-			} else if value.Valid {
-				_m.EventID = value.String
+			if value, ok := values[i].(*uuid.UUID); !ok {
+				return fmt.Errorf("unexpected type %T for field id", values[i])
+			} else if value != nil {
+				_m.ID = *value
 			}
 		case connections.FieldTime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
 				return fmt.Errorf("unexpected type %T for field time", values[i])
 			} else if value.Valid {
 				_m.Time = value.Time
+			}
+		case connections.FieldUnixTime:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field unix_time", values[i])
+			} else if value.Valid {
+				_m.UnixTime = value.Int64
 			}
 		case connections.FieldType:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -120,11 +124,11 @@ func (_m *Connections) String() string {
 	var builder strings.Builder
 	builder.WriteString("Connections(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", _m.ID))
-	builder.WriteString("event_id=")
-	builder.WriteString(_m.EventID)
-	builder.WriteString(", ")
 	builder.WriteString("time=")
 	builder.WriteString(_m.Time.Format(time.ANSIC))
+	builder.WriteString(", ")
+	builder.WriteString("unix_time=")
+	builder.WriteString(fmt.Sprintf("%v", _m.UnixTime))
 	builder.WriteString(", ")
 	builder.WriteString("type=")
 	builder.WriteString(_m.Type)

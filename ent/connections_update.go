@@ -28,20 +28,6 @@ func (_u *ConnectionsUpdate) Where(ps ...predicate.Connections) *ConnectionsUpda
 	return _u
 }
 
-// SetEventID sets the "event_id" field.
-func (_u *ConnectionsUpdate) SetEventID(v string) *ConnectionsUpdate {
-	_u.mutation.SetEventID(v)
-	return _u
-}
-
-// SetNillableEventID sets the "event_id" field if the given value is not nil.
-func (_u *ConnectionsUpdate) SetNillableEventID(v *string) *ConnectionsUpdate {
-	if v != nil {
-		_u.SetEventID(*v)
-	}
-	return _u
-}
-
 // SetTime sets the "time" field.
 func (_u *ConnectionsUpdate) SetTime(v time.Time) *ConnectionsUpdate {
 	_u.mutation.SetTime(v)
@@ -53,6 +39,27 @@ func (_u *ConnectionsUpdate) SetNillableTime(v *time.Time) *ConnectionsUpdate {
 	if v != nil {
 		_u.SetTime(*v)
 	}
+	return _u
+}
+
+// SetUnixTime sets the "unix_time" field.
+func (_u *ConnectionsUpdate) SetUnixTime(v int64) *ConnectionsUpdate {
+	_u.mutation.ResetUnixTime()
+	_u.mutation.SetUnixTime(v)
+	return _u
+}
+
+// SetNillableUnixTime sets the "unix_time" field if the given value is not nil.
+func (_u *ConnectionsUpdate) SetNillableUnixTime(v *int64) *ConnectionsUpdate {
+	if v != nil {
+		_u.SetUnixTime(*v)
+	}
+	return _u
+}
+
+// AddUnixTime adds value to the "unix_time" field.
+func (_u *ConnectionsUpdate) AddUnixTime(v int64) *ConnectionsUpdate {
+	_u.mutation.AddUnixTime(v)
 	return _u
 }
 
@@ -117,7 +124,7 @@ func (_u *ConnectionsUpdate) ExecX(ctx context.Context) {
 }
 
 func (_u *ConnectionsUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	_spec := sqlgraph.NewUpdateSpec(connections.Table, connections.Columns, sqlgraph.NewFieldSpec(connections.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(connections.Table, connections.Columns, sqlgraph.NewFieldSpec(connections.FieldID, field.TypeUUID))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
 			for i := range ps {
@@ -125,11 +132,14 @@ func (_u *ConnectionsUpdate) sqlSave(ctx context.Context) (_node int, err error)
 			}
 		}
 	}
-	if value, ok := _u.mutation.EventID(); ok {
-		_spec.SetField(connections.FieldEventID, field.TypeString, value)
-	}
 	if value, ok := _u.mutation.Time(); ok {
 		_spec.SetField(connections.FieldTime, field.TypeTime, value)
+	}
+	if value, ok := _u.mutation.UnixTime(); ok {
+		_spec.SetField(connections.FieldUnixTime, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUnixTime(); ok {
+		_spec.AddField(connections.FieldUnixTime, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(connections.FieldType, field.TypeString, value)
@@ -157,20 +167,6 @@ type ConnectionsUpdateOne struct {
 	mutation *ConnectionsMutation
 }
 
-// SetEventID sets the "event_id" field.
-func (_u *ConnectionsUpdateOne) SetEventID(v string) *ConnectionsUpdateOne {
-	_u.mutation.SetEventID(v)
-	return _u
-}
-
-// SetNillableEventID sets the "event_id" field if the given value is not nil.
-func (_u *ConnectionsUpdateOne) SetNillableEventID(v *string) *ConnectionsUpdateOne {
-	if v != nil {
-		_u.SetEventID(*v)
-	}
-	return _u
-}
-
 // SetTime sets the "time" field.
 func (_u *ConnectionsUpdateOne) SetTime(v time.Time) *ConnectionsUpdateOne {
 	_u.mutation.SetTime(v)
@@ -182,6 +178,27 @@ func (_u *ConnectionsUpdateOne) SetNillableTime(v *time.Time) *ConnectionsUpdate
 	if v != nil {
 		_u.SetTime(*v)
 	}
+	return _u
+}
+
+// SetUnixTime sets the "unix_time" field.
+func (_u *ConnectionsUpdateOne) SetUnixTime(v int64) *ConnectionsUpdateOne {
+	_u.mutation.ResetUnixTime()
+	_u.mutation.SetUnixTime(v)
+	return _u
+}
+
+// SetNillableUnixTime sets the "unix_time" field if the given value is not nil.
+func (_u *ConnectionsUpdateOne) SetNillableUnixTime(v *int64) *ConnectionsUpdateOne {
+	if v != nil {
+		_u.SetUnixTime(*v)
+	}
+	return _u
+}
+
+// AddUnixTime adds value to the "unix_time" field.
+func (_u *ConnectionsUpdateOne) AddUnixTime(v int64) *ConnectionsUpdateOne {
+	_u.mutation.AddUnixTime(v)
 	return _u
 }
 
@@ -259,7 +276,7 @@ func (_u *ConnectionsUpdateOne) ExecX(ctx context.Context) {
 }
 
 func (_u *ConnectionsUpdateOne) sqlSave(ctx context.Context) (_node *Connections, err error) {
-	_spec := sqlgraph.NewUpdateSpec(connections.Table, connections.Columns, sqlgraph.NewFieldSpec(connections.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewUpdateSpec(connections.Table, connections.Columns, sqlgraph.NewFieldSpec(connections.FieldID, field.TypeUUID))
 	id, ok := _u.mutation.ID()
 	if !ok {
 		return nil, &ValidationError{Name: "id", err: errors.New(`ent: missing "Connections.id" for update`)}
@@ -284,11 +301,14 @@ func (_u *ConnectionsUpdateOne) sqlSave(ctx context.Context) (_node *Connections
 			}
 		}
 	}
-	if value, ok := _u.mutation.EventID(); ok {
-		_spec.SetField(connections.FieldEventID, field.TypeString, value)
-	}
 	if value, ok := _u.mutation.Time(); ok {
 		_spec.SetField(connections.FieldTime, field.TypeTime, value)
+	}
+	if value, ok := _u.mutation.UnixTime(); ok {
+		_spec.SetField(connections.FieldUnixTime, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedUnixTime(); ok {
+		_spec.AddField(connections.FieldUnixTime, field.TypeInt64, value)
 	}
 	if value, ok := _u.mutation.GetType(); ok {
 		_spec.SetField(connections.FieldType, field.TypeString, value)

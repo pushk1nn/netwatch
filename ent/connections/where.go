@@ -6,62 +6,63 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
+	"github.com/google/uuid"
 	"github.com/pushk1nn/netwatch/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.
-func ID(id int) predicate.Connections {
+func ID(id uuid.UUID) predicate.Connections {
 	return predicate.Connections(sql.FieldEQ(FieldID, id))
 }
 
 // IDEQ applies the EQ predicate on the ID field.
-func IDEQ(id int) predicate.Connections {
+func IDEQ(id uuid.UUID) predicate.Connections {
 	return predicate.Connections(sql.FieldEQ(FieldID, id))
 }
 
 // IDNEQ applies the NEQ predicate on the ID field.
-func IDNEQ(id int) predicate.Connections {
+func IDNEQ(id uuid.UUID) predicate.Connections {
 	return predicate.Connections(sql.FieldNEQ(FieldID, id))
 }
 
 // IDIn applies the In predicate on the ID field.
-func IDIn(ids ...int) predicate.Connections {
+func IDIn(ids ...uuid.UUID) predicate.Connections {
 	return predicate.Connections(sql.FieldIn(FieldID, ids...))
 }
 
 // IDNotIn applies the NotIn predicate on the ID field.
-func IDNotIn(ids ...int) predicate.Connections {
+func IDNotIn(ids ...uuid.UUID) predicate.Connections {
 	return predicate.Connections(sql.FieldNotIn(FieldID, ids...))
 }
 
 // IDGT applies the GT predicate on the ID field.
-func IDGT(id int) predicate.Connections {
+func IDGT(id uuid.UUID) predicate.Connections {
 	return predicate.Connections(sql.FieldGT(FieldID, id))
 }
 
 // IDGTE applies the GTE predicate on the ID field.
-func IDGTE(id int) predicate.Connections {
+func IDGTE(id uuid.UUID) predicate.Connections {
 	return predicate.Connections(sql.FieldGTE(FieldID, id))
 }
 
 // IDLT applies the LT predicate on the ID field.
-func IDLT(id int) predicate.Connections {
+func IDLT(id uuid.UUID) predicate.Connections {
 	return predicate.Connections(sql.FieldLT(FieldID, id))
 }
 
 // IDLTE applies the LTE predicate on the ID field.
-func IDLTE(id int) predicate.Connections {
+func IDLTE(id uuid.UUID) predicate.Connections {
 	return predicate.Connections(sql.FieldLTE(FieldID, id))
-}
-
-// EventID applies equality check predicate on the "event_id" field. It's identical to EventIDEQ.
-func EventID(v string) predicate.Connections {
-	return predicate.Connections(sql.FieldEQ(FieldEventID, v))
 }
 
 // Time applies equality check predicate on the "time" field. It's identical to TimeEQ.
 func Time(v time.Time) predicate.Connections {
 	return predicate.Connections(sql.FieldEQ(FieldTime, v))
+}
+
+// UnixTime applies equality check predicate on the "unix_time" field. It's identical to UnixTimeEQ.
+func UnixTime(v int64) predicate.Connections {
+	return predicate.Connections(sql.FieldEQ(FieldUnixTime, v))
 }
 
 // Type applies equality check predicate on the "type" field. It's identical to TypeEQ.
@@ -72,71 +73,6 @@ func Type(v string) predicate.Connections {
 // IP applies equality check predicate on the "ip" field. It's identical to IPEQ.
 func IP(v string) predicate.Connections {
 	return predicate.Connections(sql.FieldEQ(FieldIP, v))
-}
-
-// EventIDEQ applies the EQ predicate on the "event_id" field.
-func EventIDEQ(v string) predicate.Connections {
-	return predicate.Connections(sql.FieldEQ(FieldEventID, v))
-}
-
-// EventIDNEQ applies the NEQ predicate on the "event_id" field.
-func EventIDNEQ(v string) predicate.Connections {
-	return predicate.Connections(sql.FieldNEQ(FieldEventID, v))
-}
-
-// EventIDIn applies the In predicate on the "event_id" field.
-func EventIDIn(vs ...string) predicate.Connections {
-	return predicate.Connections(sql.FieldIn(FieldEventID, vs...))
-}
-
-// EventIDNotIn applies the NotIn predicate on the "event_id" field.
-func EventIDNotIn(vs ...string) predicate.Connections {
-	return predicate.Connections(sql.FieldNotIn(FieldEventID, vs...))
-}
-
-// EventIDGT applies the GT predicate on the "event_id" field.
-func EventIDGT(v string) predicate.Connections {
-	return predicate.Connections(sql.FieldGT(FieldEventID, v))
-}
-
-// EventIDGTE applies the GTE predicate on the "event_id" field.
-func EventIDGTE(v string) predicate.Connections {
-	return predicate.Connections(sql.FieldGTE(FieldEventID, v))
-}
-
-// EventIDLT applies the LT predicate on the "event_id" field.
-func EventIDLT(v string) predicate.Connections {
-	return predicate.Connections(sql.FieldLT(FieldEventID, v))
-}
-
-// EventIDLTE applies the LTE predicate on the "event_id" field.
-func EventIDLTE(v string) predicate.Connections {
-	return predicate.Connections(sql.FieldLTE(FieldEventID, v))
-}
-
-// EventIDContains applies the Contains predicate on the "event_id" field.
-func EventIDContains(v string) predicate.Connections {
-	return predicate.Connections(sql.FieldContains(FieldEventID, v))
-}
-
-// EventIDHasPrefix applies the HasPrefix predicate on the "event_id" field.
-func EventIDHasPrefix(v string) predicate.Connections {
-	return predicate.Connections(sql.FieldHasPrefix(FieldEventID, v))
-}
-
-// EventIDHasSuffix applies the HasSuffix predicate on the "event_id" field.
-func EventIDHasSuffix(v string) predicate.Connections {
-	return predicate.Connections(sql.FieldHasSuffix(FieldEventID, v))
-}
-
-// EventIDEqualFold applies the EqualFold predicate on the "event_id" field.
-func EventIDEqualFold(v string) predicate.Connections {
-	return predicate.Connections(sql.FieldEqualFold(FieldEventID, v))
-}
-
-// EventIDContainsFold applies the ContainsFold predicate on the "event_id" field.
-func EventIDContainsFold(v string) predicate.Connections {
-	return predicate.Connections(sql.FieldContainsFold(FieldEventID, v))
 }
 
 // TimeEQ applies the EQ predicate on the "time" field.
@@ -177,6 +113,46 @@ func TimeLT(v time.Time) predicate.Connections {
 // TimeLTE applies the LTE predicate on the "time" field.
 func TimeLTE(v time.Time) predicate.Connections {
 	return predicate.Connections(sql.FieldLTE(FieldTime, v))
+}
+
+// UnixTimeEQ applies the EQ predicate on the "unix_time" field.
+func UnixTimeEQ(v int64) predicate.Connections {
+	return predicate.Connections(sql.FieldEQ(FieldUnixTime, v))
+}
+
+// UnixTimeNEQ applies the NEQ predicate on the "unix_time" field.
+func UnixTimeNEQ(v int64) predicate.Connections {
+	return predicate.Connections(sql.FieldNEQ(FieldUnixTime, v))
+}
+
+// UnixTimeIn applies the In predicate on the "unix_time" field.
+func UnixTimeIn(vs ...int64) predicate.Connections {
+	return predicate.Connections(sql.FieldIn(FieldUnixTime, vs...))
+}
+
+// UnixTimeNotIn applies the NotIn predicate on the "unix_time" field.
+func UnixTimeNotIn(vs ...int64) predicate.Connections {
+	return predicate.Connections(sql.FieldNotIn(FieldUnixTime, vs...))
+}
+
+// UnixTimeGT applies the GT predicate on the "unix_time" field.
+func UnixTimeGT(v int64) predicate.Connections {
+	return predicate.Connections(sql.FieldGT(FieldUnixTime, v))
+}
+
+// UnixTimeGTE applies the GTE predicate on the "unix_time" field.
+func UnixTimeGTE(v int64) predicate.Connections {
+	return predicate.Connections(sql.FieldGTE(FieldUnixTime, v))
+}
+
+// UnixTimeLT applies the LT predicate on the "unix_time" field.
+func UnixTimeLT(v int64) predicate.Connections {
+	return predicate.Connections(sql.FieldLT(FieldUnixTime, v))
+}
+
+// UnixTimeLTE applies the LTE predicate on the "unix_time" field.
+func UnixTimeLTE(v int64) predicate.Connections {
+	return predicate.Connections(sql.FieldLTE(FieldUnixTime, v))
 }
 
 // TypeEQ applies the EQ predicate on the "type" field.

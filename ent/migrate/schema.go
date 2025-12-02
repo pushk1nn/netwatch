@@ -10,9 +10,9 @@ import (
 var (
 	// ConnectionsColumns holds the columns for the "connections" table.
 	ConnectionsColumns = []*schema.Column{
-		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "event_id", Type: field.TypeString, Unique: true},
+		{Name: "id", Type: field.TypeUUID},
 		{Name: "time", Type: field.TypeTime},
+		{Name: "unix_time", Type: field.TypeInt64},
 		{Name: "type", Type: field.TypeString},
 		{Name: "ip", Type: field.TypeString},
 	}

@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 	"github.com/pushk1nn/netwatch/ent/connections"
 )
 
@@ -20,15 +21,15 @@ type ConnectionsCreate struct {
 	hooks    []Hook
 }
 
-// SetEventID sets the "event_id" field.
-func (_c *ConnectionsCreate) SetEventID(v string) *ConnectionsCreate {
-	_c.mutation.SetEventID(v)
-	return _c
-}
-
 // SetTime sets the "time" field.
 func (_c *ConnectionsCreate) SetTime(v time.Time) *ConnectionsCreate {
 	_c.mutation.SetTime(v)
+	return _c
+}
+
+// SetUnixTime sets the "unix_time" field.
+func (_c *ConnectionsCreate) SetUnixTime(v int64) *ConnectionsCreate {
+	_c.mutation.SetUnixTime(v)
 	return _c
 }
 
@@ -44,6 +45,20 @@ func (_c *ConnectionsCreate) SetIP(v string) *ConnectionsCreate {
 	return _c
 }
 
+// SetID sets the "id" field.
+func (_c *ConnectionsCreate) SetID(v uuid.UUID) *ConnectionsCreate {
+	_c.mutation.SetID(v)
+	return _c
+}
+
+// SetNillableID sets the "id" field if the given value is not nil.
+func (_c *ConnectionsCreate) SetNillableID(v *uuid.UUID) *ConnectionsCreate {
+	if v != nil {
+		_c.SetID(*v)
+	}
+	return _c
+}
+
 // Mutation returns the ConnectionsMutation object of the builder.
 func (_c *ConnectionsCreate) Mutation() *ConnectionsMutation {
 	return _c.mutation
@@ -51,6 +66,7 @@ func (_c *ConnectionsCreate) Mutation() *ConnectionsMutation {
 
 // Save creates the Connections in the database.
 func (_c *ConnectionsCreate) Save(ctx context.Context) (*Connections, error) {
+	_c.defaults()
 	return withHooks(ctx, _c.sqlSave, _c.mutation, _c.hooks)
 }
 
@@ -76,13 +92,21 @@ func (_c *ConnectionsCreate) ExecX(ctx context.Context) {
 	}
 }
 
+// defaults sets the default values of the builder before save.
+func (_c *ConnectionsCreate) defaults() {
+	if _, ok := _c.mutation.ID(); !ok {
+		v := connections.DefaultID()
+		_c.mutation.SetID(v)
+	}
+}
+
 // check runs all checks and user-defined validators on the builder.
 func (_c *ConnectionsCreate) check() error {
-	if _, ok := _c.mutation.EventID(); !ok {
-		return &ValidationError{Name: "event_id", err: errors.New(`ent: missing required field "Connections.event_id"`)}
-	}
 	if _, ok := _c.mutation.Time(); !ok {
 		return &ValidationError{Name: "time", err: errors.New(`ent: missing required field "Connections.time"`)}
+	}
+	if _, ok := _c.mutation.UnixTime(); !ok {
+		return &ValidationError{Name: "unix_time", err: errors.New(`ent: missing required field "Connections.unix_time"`)}
 	}
 	if _, ok := _c.mutation.GetType(); !ok {
 		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "Connections.type"`)}
@@ -104,8 +128,13 @@ func (_c *ConnectionsCreate) sqlSave(ctx context.Context) (*Connections, error) 
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != nil {
+		if id, ok := _spec.ID.Value.(*uuid.UUID); ok {
+			_node.ID = *id
+		} else if err := _node.ID.Scan(_spec.ID.Value); err != nil {
+			return nil, err
+		}
+	}
 	_c.mutation.id = &_node.ID
 	_c.mutation.done = true
 	return _node, nil
@@ -114,15 +143,19 @@ func (_c *ConnectionsCreate) sqlSave(ctx context.Context) (*Connections, error) 
 func (_c *ConnectionsCreate) createSpec() (*Connections, *sqlgraph.CreateSpec) {
 	var (
 		_node = &Connections{config: _c.config}
-		_spec = sqlgraph.NewCreateSpec(connections.Table, sqlgraph.NewFieldSpec(connections.FieldID, field.TypeInt))
+		_spec = sqlgraph.NewCreateSpec(connections.Table, sqlgraph.NewFieldSpec(connections.FieldID, field.TypeUUID))
 	)
-	if value, ok := _c.mutation.EventID(); ok {
-		_spec.SetField(connections.FieldEventID, field.TypeString, value)
-		_node.EventID = value
+	if id, ok := _c.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = &id
 	}
 	if value, ok := _c.mutation.Time(); ok {
 		_spec.SetField(connections.FieldTime, field.TypeTime, value)
 		_node.Time = value
+	}
+	if value, ok := _c.mutation.UnixTime(); ok {
+		_spec.SetField(connections.FieldUnixTime, field.TypeInt64, value)
+		_node.UnixTime = value
 	}
 	if value, ok := _c.mutation.GetType(); ok {
 		_spec.SetField(connections.FieldType, field.TypeString, value)
@@ -153,6 +186,7 @@ func (_c *ConnectionsCreateBulk) Save(ctx context.Context) ([]*Connections, erro
 	for i := range _c.builders {
 		func(i int, root context.Context) {
 			builder := _c.builders[i]
+			builder.defaults()
 			var mut Mutator = MutateFunc(func(ctx context.Context, m Mutation) (Value, error) {
 				mutation, ok := m.(*ConnectionsMutation)
 				if !ok {
@@ -179,10 +213,6 @@ func (_c *ConnectionsCreateBulk) Save(ctx context.Context) ([]*Connections, erro
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
-					id := specs[i].ID.Value.(int64)
-					nodes[i].ID = int(id)
-				}
 				mutation.done = true
 				return nodes[i], nil
 			})

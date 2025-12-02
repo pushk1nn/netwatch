@@ -2,8 +2,20 @@
 
 package ent
 
+import (
+	"github.com/google/uuid"
+	"github.com/pushk1nn/netwatch/ent/connections"
+	"github.com/pushk1nn/netwatch/ent/schema"
+)
+
 // The init function reads all schema descriptors with runtime code
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	connectionsFields := schema.Connections{}.Fields()
+	_ = connectionsFields
+	// connectionsDescID is the schema descriptor for id field.
+	connectionsDescID := connectionsFields[0].Descriptor()
+	// connections.DefaultID holds the default value on creation for the id field.
+	connections.DefaultID = connectionsDescID.Default.(func() uuid.UUID)
 }

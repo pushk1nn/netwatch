@@ -9,6 +9,7 @@ import (
 	"log"
 	"reflect"
 
+	"github.com/google/uuid"
 	"github.com/pushk1nn/netwatch/ent/migrate"
 
 	"entgo.io/ent"
@@ -257,7 +258,7 @@ func (c *ConnectionsClient) UpdateOne(_m *Connections) *ConnectionsUpdateOne {
 }
 
 // UpdateOneID returns an update builder for the given id.
-func (c *ConnectionsClient) UpdateOneID(id int) *ConnectionsUpdateOne {
+func (c *ConnectionsClient) UpdateOneID(id uuid.UUID) *ConnectionsUpdateOne {
 	mutation := newConnectionsMutation(c.config, OpUpdateOne, withConnectionsID(id))
 	return &ConnectionsUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
 }
@@ -274,7 +275,7 @@ func (c *ConnectionsClient) DeleteOne(_m *Connections) *ConnectionsDeleteOne {
 }
 
 // DeleteOneID returns a builder for deleting the given entity by its id.
-func (c *ConnectionsClient) DeleteOneID(id int) *ConnectionsDeleteOne {
+func (c *ConnectionsClient) DeleteOneID(id uuid.UUID) *ConnectionsDeleteOne {
 	builder := c.Delete().Where(connections.ID(id))
 	builder.mutation.id = &id
 	builder.mutation.op = OpDeleteOne
@@ -291,12 +292,12 @@ func (c *ConnectionsClient) Query() *ConnectionsQuery {
 }
 
 // Get returns a Connections entity by its id.
-func (c *ConnectionsClient) Get(ctx context.Context, id int) (*Connections, error) {
+func (c *ConnectionsClient) Get(ctx context.Context, id uuid.UUID) (*Connections, error) {
 	return c.Query().Where(connections.ID(id)).Only(ctx)
 }
 
 // GetX is like Get, but panics if an error occurs.
-func (c *ConnectionsClient) GetX(ctx context.Context, id int) *Connections {
+func (c *ConnectionsClient) GetX(ctx context.Context, id uuid.UUID) *Connections {
 	obj, err := c.Get(ctx, id)
 	if err != nil {
 		panic(err)

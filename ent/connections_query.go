@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/google/uuid"
 	"github.com/pushk1nn/netwatch/ent/connections"
 	"github.com/pushk1nn/netwatch/ent/predicate"
 )
@@ -82,8 +83,8 @@ func (_q *ConnectionsQuery) FirstX(ctx context.Context) *Connections {
 
 // FirstID returns the first Connections ID from the query.
 // Returns a *NotFoundError when no Connections ID was found.
-func (_q *ConnectionsQuery) FirstID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ConnectionsQuery) FirstID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = _q.Limit(1).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryFirstID)); err != nil {
 		return
 	}
@@ -95,7 +96,7 @@ func (_q *ConnectionsQuery) FirstID(ctx context.Context) (id int, err error) {
 }
 
 // FirstIDX is like FirstID, but panics if an error occurs.
-func (_q *ConnectionsQuery) FirstIDX(ctx context.Context) int {
+func (_q *ConnectionsQuery) FirstIDX(ctx context.Context) uuid.UUID {
 	id, err := _q.FirstID(ctx)
 	if err != nil && !IsNotFound(err) {
 		panic(err)
@@ -133,8 +134,8 @@ func (_q *ConnectionsQuery) OnlyX(ctx context.Context) *Connections {
 // OnlyID is like Only, but returns the only Connections ID in the query.
 // Returns a *NotSingularError when more than one Connections ID is found.
 // Returns a *NotFoundError when no entities are found.
-func (_q *ConnectionsQuery) OnlyID(ctx context.Context) (id int, err error) {
-	var ids []int
+func (_q *ConnectionsQuery) OnlyID(ctx context.Context) (id uuid.UUID, err error) {
+	var ids []uuid.UUID
 	if ids, err = _q.Limit(2).IDs(setContextOp(ctx, _q.ctx, ent.OpQueryOnlyID)); err != nil {
 		return
 	}
@@ -150,7 +151,7 @@ func (_q *ConnectionsQuery) OnlyID(ctx context.Context) (id int, err error) {
 }
 
 // OnlyIDX is like OnlyID, but panics if an error occurs.
-func (_q *ConnectionsQuery) OnlyIDX(ctx context.Context) int {
+func (_q *ConnectionsQuery) OnlyIDX(ctx context.Context) uuid.UUID {
 	id, err := _q.OnlyID(ctx)
 	if err != nil {
 		panic(err)
@@ -178,7 +179,7 @@ func (_q *ConnectionsQuery) AllX(ctx context.Context) []*Connections {
 }
 
 // IDs executes the query and returns a list of Connections IDs.
-func (_q *ConnectionsQuery) IDs(ctx context.Context) (ids []int, err error) {
+func (_q *ConnectionsQuery) IDs(ctx context.Context) (ids []uuid.UUID, err error) {
 	if _q.ctx.Unique == nil && _q.path != nil {
 		_q.Unique(true)
 	}
@@ -190,7 +191,7 @@ func (_q *ConnectionsQuery) IDs(ctx context.Context) (ids []int, err error) {
 }
 
 // IDsX is like IDs, but panics if an error occurs.
-func (_q *ConnectionsQuery) IDsX(ctx context.Context) []int {
+func (_q *ConnectionsQuery) IDsX(ctx context.Context) []uuid.UUID {
 	ids, err := _q.IDs(ctx)
 	if err != nil {
 		panic(err)
@@ -262,12 +263,12 @@ func (_q *ConnectionsQuery) Clone() *ConnectionsQuery {
 // Example:
 //
 //	var v []struct {
-//		EventID string `json:"event_id,omitempty"`
+//		Time time.Time `json:"time,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.Connections.Query().
-//		GroupBy(connections.FieldEventID).
+//		GroupBy(connections.FieldTime).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (_q *ConnectionsQuery) GroupBy(field string, fields ...string) *ConnectionsGroupBy {
@@ -285,11 +286,11 @@ func (_q *ConnectionsQuery) GroupBy(field string, fields ...string) *Connections
 // Example:
 //
 //	var v []struct {
-//		EventID string `json:"event_id,omitempty"`
+//		Time time.Time `json:"time,omitempty"`
 //	}
 //
 //	client.Connections.Query().
-//		Select(connections.FieldEventID).
+//		Select(connections.FieldTime).
 //		Scan(ctx, &v)
 func (_q *ConnectionsQuery) Select(fields ...string) *ConnectionsSelect {
 	_q.ctx.Fields = append(_q.ctx.Fields, fields...)
@@ -365,7 +366,7 @@ func (_q *ConnectionsQuery) sqlCount(ctx context.Context) (int, error) {
 }
 
 func (_q *ConnectionsQuery) querySpec() *sqlgraph.QuerySpec {
-	_spec := sqlgraph.NewQuerySpec(connections.Table, connections.Columns, sqlgraph.NewFieldSpec(connections.FieldID, field.TypeInt))
+	_spec := sqlgraph.NewQuerySpec(connections.Table, connections.Columns, sqlgraph.NewFieldSpec(connections.FieldID, field.TypeUUID))
 	_spec.From = _q.sql
 	if unique := _q.ctx.Unique; unique != nil {
 		_spec.Unique = *unique
