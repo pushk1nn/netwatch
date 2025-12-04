@@ -5,7 +5,7 @@ import os
 from connector import check_session
 from pathlib import Path
 
-def get_timestamp() -> int:
+def get_timestamp() -> list:
     path = argparse.ArgumentParser(description="Get a file's atime Unix timestamp.")
     path.add_argument("file", type=Path, help="Path to the file")
     args = path.parse_args()
@@ -18,15 +18,16 @@ def get_timestamp() -> int:
 
     st = os.stat(file, follow_symlinks=False)
 
-    atime_timestamp = int(st.st_atime)
-    return atime_timestamp
+    mac_times: list = [int(st.st_atime), int(st.st_mtime), int(st.st_ctime)]
+
+    return mac_times
 
 
 def main() -> int:
-    timestamp: int = get_timestamp()
-    print(timestamp)
-    ret: str = check_session('../net_watcher/data.sqlite', timestamp)
-    print(ret)
+    timestamps: list = get_timestamp()
+    for stamp in timestamps:
+        ret: str = check_session('../net_watcher/data.sqlite', stamp)
+        print(ret)
     return 0
 
 if __name__ == "__main__":
