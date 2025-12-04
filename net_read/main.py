@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import argparse
-from datetime import datetime
 import os
 from connector import check_session
 from pathlib import Path
 
+#Grabs Mactimes of file passed to the program
 def get_timestamp() -> list:
     path = argparse.ArgumentParser(description="Get a file's atime Unix timestamp.")
     path.add_argument("file", type=Path, help="Path to the file")
@@ -16,13 +16,13 @@ def get_timestamp() -> list:
     if not file.is_file():
         raise SystemExit(f"Not a regular file: {file}")
 
-    st = os.stat(file, follow_symlinks=False)
+    stat = os.stat(file, follow_symlinks=False)
 
-    mac_times: list = [int(st.st_atime), int(st.st_mtime), int(st.st_ctime)]
+    mac_times: list = [int(stat.st_atime), int(stat.st_mtime), int(stat.st_ctime)]
 
     return mac_times
 
-
+#Driver code to pass timestamps and receive associated IPs
 def main() -> int:
     timestamps: list = get_timestamp()
     for stamp in timestamps:
