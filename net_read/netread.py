@@ -22,12 +22,24 @@ def get_timestamp() -> list:
 
     return mac_times
 
+def output_time(res, type):
+    for ip in res:
+        print(f"%s was connected when file was %s", res, type)
+
 #Driver code to pass timestamps and receive associated IPs
 def main() -> int:
     timestamps: list = get_timestamp()
-    for stamp in timestamps:
-        ret: str = check_session('../net_watcher/data.sqlite', stamp)
-        print(ret)
+    # for stamp in timestamps:
+    #     ret: str = check_session('../net_watcher/data.sqlite', stamp)
+    #     print(ret)
+
+    output_time(timestamps[0], "accessed")
+
+    output_time(timestamps[1], "modified")
+
+    output_time(timestamps[2], "changed")
+
+
     return 0
 
 if __name__ == "__main__":
