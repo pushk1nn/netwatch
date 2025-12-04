@@ -25,8 +25,7 @@ def get_timestamp() -> int:
 def main() -> int:
     timestamp: int = get_timestamp()
     print(timestamp)
-    timestamp_to_check = datetime.fromisoformat('2025-12-02 21:06:45.129551-05:00').timestamp()
-    ret: str = check_session('../net_watcher/data.sqlite', timestamp_to_check)
+    ret: str = check_session('../net_watcher/data.sqlite', timestamp)
     print(ret)
     return 0
 
