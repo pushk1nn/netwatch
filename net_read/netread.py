@@ -25,7 +25,7 @@ def get_timestamp() -> list:
 def output_time(res, action):
     if res:
         for ip in res:
-            print(f"{res} was connected when file was {action}")
+            print(f"{ip} was connected when file was {action}")
 
 #Driver code to pass timestamps and receive associated IPs
 def main() -> int:
