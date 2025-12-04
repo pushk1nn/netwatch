@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import argparse
+import datetime
 import os
 from connector import check_session
 from pathlib import Path
@@ -24,7 +25,7 @@ def get_timestamp() -> int:
 def main() -> int:
     timestamp: int = get_timestamp()
     print(timestamp)
-    ret: str = check_session('../net_watcher/data.sqlite', timestamp)
+    ret: str = check_session('../net_watcher/data.sqlite', datetime.fromisoformat('2025-12-02 21:06:45.129551-05:00').timestamp())
     print(ret)
     return 0
 
