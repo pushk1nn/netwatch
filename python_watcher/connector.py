@@ -2,7 +2,7 @@
 import sqlite3
 from datetime import datetime
 
-def check_session(database, timestamp):
+def check_session(database: str, timestamp: int) -> str:
     # Convert the input timestamp to a string format for SQL query
     #timestamp_str = timestamp.timestamp()
 
@@ -23,7 +23,7 @@ def check_session(database, timestamp):
     ret = cursor.fetchone()
     conn.close()
 
-    return ret
+    return ret[0]
 
 # Example Usage
 db_path = '../data.sqlite'
