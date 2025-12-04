@@ -23,10 +23,16 @@ def check_session(database: str, timestamp: int) -> str:
     ret = cursor.fetchone()
     conn.close()
 
-    return ret[0]
+    if ret:
+        return ret
+    else:
+        return None
 
-# Example Usage
-db_path = '../net_watcher/data.sqlite'
-timestamp_to_check = datetime.fromisoformat('2025-12-02 21:06:45.129551-05:00').timestamp()
+if __name__ == "__main__":
+    # Example Usage
+    db_path = '../net_watcher/data.sqlite'
+    timestamp_to_check = datetime.fromisoformat('2025-12-02 21:06:45.129551-05:00').timestamp()
+    time = input('what unix time\n')
 
-print(check_session(db_path, timestamp_to_check))
+
+    print(check_session(db_path, timestamp_to_check if time == '\n' else time))
