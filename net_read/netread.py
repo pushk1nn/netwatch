@@ -3,6 +3,8 @@ import argparse
 import os
 from connector import check_session
 from pathlib import Path
+import datetime
+import pytz
 
 #Grabs Mactimes of file passed to the program
 def get_timestamp() -> list:
@@ -22,10 +24,10 @@ def get_timestamp() -> list:
 
     return mac_times
 
-def output_time(res, action):
+def output_time(res):
     if res:
         for ip in res:
-            print(f"{ip} was connected when file was {action}")
+            print(f"Connection from {ip}")
 
 #Driver code to pass timestamps and receive associated IPs
 def main() -> int:
@@ -34,14 +36,19 @@ def main() -> int:
     #     ret: str = check_session('../net_watcher/data.sqlite', stamp)
     #     print(ret)
 
+    est_timezone = pytz.timezone('America/New_York')
+
     res = check_session('../net_watcher/data.sqlite', timestamps[0])
-    output_time(res, "accessed")
+    print("ACCESSED:", datetime.datetime.fromtimestamp(timestamps[0], tz=est_timezone))
+    output_time(res)
 
     res = check_session('../net_watcher/data.sqlite', timestamps[1])
-    output_time(res, "modified")
+    print("\nMODIFIED:", datetime.datetime.fromtimestamp(timestamps[1], tz=est_timezone))
+    output_time(res)
 
     res = check_session('../net_watcher/data.sqlite', timestamps[2])
-    output_time(res, "changed")
+    print("\nCHANGED:", datetime.datetime.fromtimestamp(timestamps[2], tz=est_timezone))
+    output_time(res)
 
 
     return 0
