@@ -26,7 +26,7 @@ def check_session(database: str, timestamp: int) -> str:
     return ret[0]
 
 # Example Usage
-db_path = '../data.sqlite'
+db_path = '../net_watcher/data.sqlite'
 timestamp_to_check = datetime.fromisoformat('2025-12-02 21:06:45.129551-05:00').timestamp()
 
 print(check_session(db_path, timestamp_to_check))

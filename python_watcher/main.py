@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import os
+from connector import check_session
 from pathlib import Path
 
 def get_timestamp() -> int:
@@ -23,6 +24,8 @@ def get_timestamp() -> int:
 def main() -> int:
     timestamp: int = get_timestamp()
     print(timestamp)
+    ret: str = check_session('../net_watcher/data.sqlite', timestamp)
+    print(ret)
     return 0
 
 if __name__ == "__main__":
