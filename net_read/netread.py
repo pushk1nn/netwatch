@@ -33,11 +33,14 @@ def main() -> int:
     #     ret: str = check_session('../net_watcher/data.sqlite', stamp)
     #     print(ret)
 
-    output_time(timestamps[0], "accessed")
+    res = check_session('../net_watcher/data.sqlite', timestamp[0])
+    output_time(res, "accessed")
 
-    output_time(timestamps[1], "modified")
+    res = check_session('../net_watcher/data.sqlite',  timestamp[1])
+    output_time(res, "modified")
 
-    output_time(timestamps[2], "changed")
+    res = check_session('../net_watcher/data.sqlite',  timestamp[2])
+    output_time(res, "changed")
 
 
     return 0
