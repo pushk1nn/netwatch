@@ -17,6 +17,7 @@ def get_timestamp() -> int:
     st = os.stat(file, follow_symlinks=False)
 
     atime_timestamp = int(st.st_atime)
+    return atime_timestamp
 
 
 def main() -> int:
