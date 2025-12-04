@@ -23,8 +23,9 @@ def get_timestamp() -> list:
     return mac_times
 
 def output_time(res, type):
-    for ip in res:
-        print(f"%s was connected when file was %s", res, type)
+    if res:
+        for ip in res:
+            print(f"%s was connected when file was %s", res, type)
 
 #Driver code to pass timestamps and receive associated IPs
 def main() -> int:
