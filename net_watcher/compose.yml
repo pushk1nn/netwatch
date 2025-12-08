@@ -1,0 +1,9 @@
+services:
+  listener:
+    build: ./
+    cap_add:
+      - NET_RAW
+      - NET_ADMIN
+      - SYS_ADMIN
+    network_mode: host
+    user: root
